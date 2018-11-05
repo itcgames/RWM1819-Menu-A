@@ -1,6 +1,7 @@
 'use strict';
 
-class Demo
+/* Demo Class Not to Be Used, for user guide only */
+class DemoClassNTBU 
 {
   constructor()
   {

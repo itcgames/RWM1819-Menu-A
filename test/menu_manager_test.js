@@ -1,7 +1,36 @@
-/* global MenuManager, describe, it, expect, should */
-
+/* Testing */
 var mManager = new MenuManager(); //Create a menu manager
 
+/* Scene class, this is only define din the test to avoid conflicts */
+class Scene {
+    /**
+    * Constructor
+    * @param {!name} str the name of the scene
+    * @param {!colour} colour the colour of the screen
+    */
+    constructor(name, colour) {
+        this.colour = colour;
+        this.name = name;
+    }
+    /**
+    * Updates the current scene
+    */
+    update() {
+        console.log("updating " + this.name + " scene");
+    }
+    /**
+    * Draws the current scene
+    * @param {!ctx} context The context of the window, used for drawing
+    */
+    draw(ctx) {
+        ctx.fillStyle = this.colour; //Set colour to the passed in colour
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+}
+
+
+
+//Create our scenes
 var scenes = [
   new Scene("Scene1", "#f48942"),
   new Scene("Scene2", "#f4f141"),
@@ -12,10 +41,8 @@ var scenes = [
 ];
 
 
-
 var ctx;
 var canvas;
-
 canvas = document.createElement("canvas");
 canvas.id = 'mycanvas';
 canvas.width = window.innerWidth;
@@ -23,7 +50,10 @@ canvas.height = window.innerHeight;
 ctx = this.canvas.getContext("2d");
 document.body.appendChild(this.canvas);
 
-
+/**
+* Loop for a specified amount of time (essentially pausing the execution of the program)
+* @param {!milliseconds} int The amount of milliseconds to pause for
+*/
 function sleep(milliseconds) { //Sleep function
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
@@ -33,6 +63,10 @@ function sleep(milliseconds) { //Sleep function
   }
 }
 
+/**
+* Updates and draws a specified scene
+* @param {!name} str The name of the scene to update and draw
+*/
 function drawScene(name){
   mManager.setCurrentScene(name);
   mManager.update();

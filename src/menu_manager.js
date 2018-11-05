@@ -1,13 +1,22 @@
 'use strict';
 
+/* Menu Manager */
 class MenuManager
 {
+  /**
+  * Constructor
+  */
   constructor()
   {
     this.scenes = new Map(); //Create our Map
     this.current = undefined; //Set the current scene to undefined
-  }
+    }
 
+  /**
+  * Adds a scene to the menu manager
+  * @param {!name} str Name/Key of the scene
+  * @param {!scene} obj The scene object itself
+  */
   addScene(name, scene)
   {
     if(this.scenes.has(name))
@@ -24,6 +33,9 @@ class MenuManager
     }
   }
 
+  /**
+  * Updates the current active scene
+  */
   update() //Updates the current scene
   {
     if(this.current !== undefined)
@@ -31,7 +43,10 @@ class MenuManager
       this.current.update();
     }
   }
-
+  /**
+  * Draws the currently active scene
+  * @param {!ctx} context Context of the window
+  */
   draw(ctx) //Draws the current scene using the window context
   {
     ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height); //Clear the canvas
@@ -45,13 +60,17 @@ class MenuManager
       ctx.fillStyle = "#FF0000"; //Set colour to RED
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height); //Fill the canvas
     }
-  }
+    }
 
+  /**
+  * Removes a scene from the scene manager
+  * @param {!name} str The name of the scene to be removed
+  */
   removeScene(name)
   {
-    if(this.scenes.has(name))
+    if(this.scenes.has(name)) //If the key 'name' is in the map
     {
-      this.scenes.delete(name);
+      this.scenes.delete(name); //Delete the scene
 
       if(this.scenes.keys.length === 0)
       {
@@ -65,6 +84,10 @@ class MenuManager
     //TBI
   }
 
+   /**
+  * Sets the current scene using the paramater 'name'
+  * @param {!name} str Name of the scene to set as the active scene
+  */
   setCurrentScene(name)
   {
     if(this.scenes.has(name))
