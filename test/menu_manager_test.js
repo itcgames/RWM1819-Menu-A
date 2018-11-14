@@ -16,7 +16,6 @@ class Scene {
     * Updates the current scene
     */
     update() {
-        console.log("updating " + this.name + " scene");
     }
     /**
     * Draws the current scene
@@ -82,8 +81,9 @@ describe('MenuManager', function () {
     expect(MenuManager).to.be.a('function');
     expect(mManager.addScene).to.be.a('function');
     expect(mManager.removeScene).to.be.a('function');
-    expect(mManager.setAutoTransition).to.be.a('function');
+    expect(mManager.fadeTo).to.be.a('function');
     expect(mManager.setCurrentScene).to.be.a('function');
+    expect(mManager.setFadeSpeed).to.be.a('function');
     expect(mManager.update).to.be.a('function');
     expect(mManager.draw).to.be.a('function');
   });
@@ -116,5 +116,23 @@ describe('MenuManager', function () {
 
   it('Draw Scene3', function () {
       drawScene("Scene3");
+  });
+
+  it('Fade Test', function () {
+    mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
+
+    var start = new Date().getTime(); //Start timer
+
+    while(true)
+    {
+      if ((new Date().getTime() - start) > 4000){ // If 4 seconds have passed
+        break;
+      }
+      //Update/draw the scene
+      mManager.update();
+      mManager.draw(ctx);
+    }
+
+    expect(mManager.current.key).to.equal("Scene1"); //Should be at scene1 now after the fade
   });
 });
