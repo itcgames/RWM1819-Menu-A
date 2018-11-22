@@ -34,6 +34,10 @@ class Game
 
     this.mManager.addScene("Splash", new Scene('#2111dd')); //Add a splash scene to the manager
     this.mManager.addScene("Main Menu", new Scene('#dd6d11')) //Add a main menu to the manager
+
+    this.mManager.fadeSpeed = 4000; //Set the fade in/out to last 4 seconds
+
+    //Fade from our blue splash screen to our orange menu scene
     this.mManager.fadeTo("Main Menu"); //Fade from splash to main
   }
   initGame()
