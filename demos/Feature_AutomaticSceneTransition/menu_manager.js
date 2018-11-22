@@ -64,7 +64,7 @@ class MenuManager
     if(!this.fading && this.current.value.sceneEnded)
     {
       this.fadeTo(this.current.value.autoFadeToScene);
-      console.log("Fading to scene automatically")
+      console.log("Fading to scene automatically to scene")
     }
 
     if(this.fading)
