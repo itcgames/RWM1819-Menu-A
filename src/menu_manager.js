@@ -189,3 +189,7 @@ class MenuManager
     this.fadeSpeed = speed;
   }
 }
+
+if (typeof module !== "undefined") {
+  module.exports = MenuManager; //Enter your class name
+}
