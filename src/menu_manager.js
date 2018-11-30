@@ -55,11 +55,11 @@ class MenuManager
   /**
   * Updates the current active scene
   */
-  update() //Updates the current scene
+  update(dt) //Updates the current scene
   {
     if(this.current.value !== undefined)
     {
-      this.current.value.update();
+      this.current.value.update(dt);
     }
     if(!this.fading && this.current.value.sceneEnded)
     {
