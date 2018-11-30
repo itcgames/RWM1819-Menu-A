@@ -95,7 +95,7 @@ class MenuManager
   */
   draw(ctx) //Draws the current scene using the window context
   {
-    ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height); //Clear the canvas
+    //ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height); //Clear the canvas
 
     //Draw the current scene if there is one
     if(this.current.value !== undefined)
