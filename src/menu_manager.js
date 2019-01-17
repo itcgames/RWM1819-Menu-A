@@ -28,6 +28,15 @@ class MenuManager
     this.fadeStartTime; //The time the fade in/out started at
     this.fadeAlpha = 1.0; //The alpha we will draw with
     this.sceneToFadeTo = ""; //The scene we want to fade to
+
+    //Allignment variables
+    //This holds a dictionary of possible positions of an allignment
+    this.buttonAllignment = {"Horizontal": ["Top", "Bottom"], "Vertical": ["Left", "Right", "Center"]};
+    this.sceneAllignments = new Map(); //A map of our scenes allignments
+    this.useButtonAllignment = new Map(); //A map of bools for our scenes
+
+    //Button variables
+    this.sceneButtons = new Map(); //A map of scene buttons
   }
 
   /**
@@ -43,6 +52,9 @@ class MenuManager
     }
 
     this.scenes.set(name, scene); //add scene to our map, with the key 'name'
+    this.sceneAllignments.set(name, ["Horizontal", "Top"]); //Add scene allignment to our map
+    this.sceneButtons.set(name, []); //Initialise empty button list
+    this.useButtonAllignment.set(name, false); //Dont use button allignment for this scene
 
     if(this.current.value == undefined) //automatically sets current to the first scene added
     {
@@ -188,8 +200,50 @@ class MenuManager
   {
     this.fadeSpeed = speed;
   }
-}
 
-if (typeof module !== "undefined") {
-  module.exports = MenuManager; //Enter your class name
+  /**
+  * Sets the allignment of buttons for a scene. This allows a user to decide
+  * if a scenes buttons should be distributed accross the top/bottom/left/right
+  * of the scene
+  * @param {!sceneName} str The name of the scene we want to set the allignment of
+  * @param {!allignment} str The allignment we want, Horizontal or Vertical
+  * @param {!position} str The position of the alignment we want Top/Bottom/Left/Right/Center
+  */
+  setButtonAllignment(sceneName, allignment, position)
+  {
+      //If the scene exists
+      if(this.scenes.has(sceneName)){
+
+        //If the allignment combination is correct then set it
+        if(this.buttonAllignment[allignment].has(position))
+        {
+          //Set the scene allignment
+          this.sceneAllignments[sceneName] = [allignement, position];
+          this.useButtonAllignment[sceneName] = true; //Use button allignment
+        }
+      }
+  }
+
+  /**
+  * Sets the allignment of buttons for a scene. This allows a user to decide
+  * if a scenes buttons should be distributed accross the top/bottom/left/right
+  * of the scene
+  * @param {!sceneName} str The name of the scene we want to add a button to
+  * @param {!button} button The button to add to the scene class
+  */
+  addButtonToScene(sceneName, button)
+  {
+    //If the scene exists
+    if(this.scenes.has(sceneName)){
+
+      //Add button to the scene
+      this.sceneButtons[sceneName].push(button);
+
+      //If using button allignment, allign the button
+      if(this.useButtonAllignment[sceneName]){
+      //Position the button based on allignment
+
+      }
+    }
+  }
 }
