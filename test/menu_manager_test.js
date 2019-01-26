@@ -178,13 +178,14 @@ describe('MenuManager', function () {
   });
 
   it('Fade Test', function () {
+    mManager.fadeSpeed = 500;
     mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
 
     var start = new Date().getTime(); //Start timer
 
     while(true)
     {
-      if ((new Date().getTime() - start) > 4000){ // If 4 seconds have passed
+      if ((new Date().getTime() - start) > 2000){ // If  seconds have passed
         break;
       }
       //Update/draw the scene
@@ -201,11 +202,12 @@ describe('MenuManager', function () {
     var optionsButton = new Button(0,0,150, 50, "OPTIONS");
     var exitButton = new Button(0,0,150, 50, "EXIT");
     var menuScene = new MenuScene("#42f4f4");
+    mManager.removeScene("Main Menu");
     mManager.addScene("Main Menu", menuScene); //Add the main menu to the menu manager
     mManager.setCurrentScene("Main Menu"); //Make main menu the current scene
     mManager.setButtonAllignment("Main Menu");
-    //Set the buttons to start at 100, 100 and have 200 pixels between each other on the x axis
-    mManager.setButtonStartAndSpacing(150, 200, 200, 0); 
+    //Set the buttons to start at 400, 150 and have 150 pixels between each other on the Y axis
+    mManager.setButtonStartAndSpacing(400, 150, 0, 150); 
 
     //Add the 3 buttons to the scene
     mManager.addButtonToScene("Main Menu", playButton);
