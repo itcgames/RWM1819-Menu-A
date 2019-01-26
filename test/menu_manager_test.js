@@ -177,24 +177,24 @@ describe('MenuManager', function () {
       drawScene("Scene3", 1000);
   });
 
-  it('Fade Test', function () {
-    mManager.fadeSpeed = 500;
-    mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
+  // it('Fade Test', function () {
+  //   mManager.fadeSpeed = 500;
+  //   mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
 
-    var start = new Date().getTime(); //Start timer
+  //   var start = new Date().getTime(); //Start timer
 
-    while(true)
-    {
-      if ((new Date().getTime() - start) > 2000){ // If  seconds have passed
-        break;
-      }
-      //Update/draw the scene
-      mManager.update();
-      mManager.draw(ctx);
-    }
+  //   while(true)
+  //   {
+  //     if ((new Date().getTime() - start) > 2000){ // If  seconds have passed
+  //       break;
+  //     }
+  //     //Update/draw the scene
+  //     mManager.update();
+  //     mManager.draw(ctx);
+  //   }
 
-    expect(mManager.current.key).to.equal("Scene1"); //Should be at scene1 now after the fade
-  });
+  //   expect(mManager.current.key).to.equal("Scene1"); //Should be at scene1 now after the fade
+  // });
 
   //Testing button allignment
   it('Button Allignment test', function (){
@@ -218,22 +218,20 @@ describe('MenuManager', function () {
   });
 
   it('Testing Widgets', function (){
-    // var playButton = new Button(0,0, 150, 50, "PLAY");
-    // var optionsButton = new Button(0,0,150, 50, "OPTIONS");
-    // var exitButton = new Button(0,0,150, 50, "EXIT");
-    // var menuScene = new MenuScene("#42f4f4");
-    // mManager.removeScene("Main Menu");
-    // mManager.addScene("Main Menu", menuScene); //Add the main menu to the menu manager
-    // mManager.setCurrentScene("Main Menu"); //Make main menu the current scene
-    // mManager.setButtonAllignment("Main Menu");
-    // //Set the buttons to start at 400, 150 and have 150 pixels between each other on the Y axis
-    // mManager.setButtonStartAndSpacing(400, 150, 0, 150); 
 
-    // //Add the 3 buttons to the scene
-    // mManager.addButtonToScene("Main Menu", playButton, true);
-    // mManager.addButtonToScene("Main Menu", optionsButton, true);
-    // mManager.addButtonToScene("Main Menu", exitButton);
+    mManager.addScene("Options", new Scene("#42f4f4"));
+    mManager.setCurrentScene("Options");
+    //Create radio button at 150, 150 with a size of 50 radius and its not checked
+    var soundOnButton = mManager.createRadioButton(150, 150, 50, "Sound Button", false);
+    var debugDrawOn = mManager.createRadioButton(150, 275, 50, "Debug Draw Button", false);
+    var playButton = mManager.createMenuButton(150, 400, 200, 50, "Play Button", "PLAY");
 
-    // mManager.draw(ctx);
+
+    //Add the 3 buttons to the scene
+    mManager.addButtonToScene("Options", soundOnButton, false);
+    mManager.addButtonToScene("Options", debugDrawOn, false);
+    mManager.addButtonToScene("Options", playButton, false);
+
+    mManager.draw(ctx);
   });
 });

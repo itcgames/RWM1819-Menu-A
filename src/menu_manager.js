@@ -26,8 +26,8 @@ class MMRect
     this.y = y;
     this.w = w;
     this.h = h;
-    this.min = {"x":this.x, "y":this.y};
-    this.min = {"x":this.x + this.w, "y":this.y + this.y};
+    this.min = {x:this.x, y:this.y};
+    this.max = {x:this.x + this.w, y:this.y + this.y};
   }
 
   /**
@@ -39,8 +39,8 @@ class MMRect
   {
     this.x = x;
     this.y = y;
-    this.min = {"x":this.x, "y":this.y};
-    this.min = {"x":this.x + this.w, "y":this.y + this.y};
+    this.min = {x:this.x, y:this.y};
+    this.max = {x:this.x + this.w, y:this.y + this.w};
   }
 
   /**
@@ -50,8 +50,8 @@ class MMRect
   intersects(other)
   {
       // Exit with no intersection if found separated along an axis
-    if(this.max["x"] < other.min["x"] || this.min["x"] > other.max["x"]) return false;
-    if(this.max["y"] < other.min["y"] || this.min["y"] > other.max["y"]) return false;
+    if(this.max.x < other.min.x || this.min.x > other.max.x) return false;
+    if(this.max.y < other.min.y || this.min.y > other.max.y) return false;
  
     // No separating axis found, therefor there is at least one overlapping axis
     return true
@@ -74,23 +74,41 @@ class MMRadioButton
   * @param {!x} int The X Position of the radio button
   * @param {!y} int The Y Position of the radio button
   * @param {!r} int The Radius of the radio button
+  * @param {!id} str The id of the button
   */
-  constructor(x, y, r, checked)
+  constructor(x, y, r, id, checked)
   {
     this.x = x;
     this.y = y;
     this.r = r;
+    this.id = id;
+    this.highlighted = false; //Set wheter the button is highlighted
     this.fillColour = "#000000"; //Set to black
     this.outlineColour = "#000000"; //Set to black
-    this.checkRadius = r - 5; //Checked radius is teh radius of the button minus 5
-    this.outlineThickness = 2;
+    this.checkRadius = r - 20; //Checked radius is teh radius of the button minus 5
+    this.outlineThickness = 10;
     this.checked = checked; //Set whether the radio button is checked or not
-    this.rect = new MMRect(x, y, r * 2, r * 2); //Creates a new rectangle
+    this.rect = new MMRect(x - r, y - r, r * 2, r * 2); //Creates a new rectangle
   }
 
   setFillColour(colour)
   {
     this.fillColour = colour;
+  }
+
+  setHighlighted(bool)
+  {
+    this.highlighted = bool;
+  }
+
+  setChecked(bool)
+  {
+    this.checked = bool;
+  }
+
+  check()
+  {
+    this.checked = !this.checked;
   }
 
   setOutlineColour(colour)
@@ -113,14 +131,89 @@ class MMRadioButton
     ctx.stroke();
       
     //If the checkbox is checked, then draw the inner circle
+    ctx.beginPath();
+    ctx.strokeStyle = this.fillColour;
+    ctx.arc(this.x, this.y, this.checkRadius, 0, 2 * Math.PI);
     if(this.checked)
     {
-      ctx.strokeStyle = this.fillColour;
-      ctx.lineWidth = this.checkRadius;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-      ctx.stroke();
+      ctx.fillStyle = this.fillColour;
+      ctx.fill();
     }
+    ctx.lineWidth = this.outlineThickness / 2;
+    ctx.stroke();
+
+    ctx.restore(); //Restore it
+  }
+}
+
+/* Menu Manager Radio Button */
+class MMButton
+{
+  /**
+  * Radio button constructor
+  * @param {!x} int The X Position of the button
+  * @param {!y} int The Y Position of the button
+  * @param {!w} int The Width of the button
+  * @param {!h} int The Height of the button
+  * @param {!id} str The id of the button
+  * @param {!text} str The text to display in the button
+  */
+  constructor(x, y, w, h, id, text = "")
+  {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.id = id;
+    this.text = text;
+    this.textSize = 50;
+    this.textColour = "#000000"; //Black text
+    this.outlineColour = "#000000"; //Black outline colour
+    this.fillColour = "#ffffff"; //White
+    this.outlineThickness = 5;
+    this.rect = new MMRect(x, y, w, h); //Creates a new rectangle
+  }
+
+  setFillColour(colour)
+  {
+    this.fillColour = colour;
+  }
+
+  setHighlighted(bool)
+  {
+    this.highlighted = bool;
+  }
+
+  setOutlineColour(colour)
+  {
+    this.outlineColour = colour;
+  }
+
+  setTextSize(size)
+  {
+    this.textSize = size;
+  }
+
+  setOutlineThickness(thickness)
+  {
+    this.outlineThickness = thickness;
+  }
+
+  draw(ctx)
+  {
+    ctx.save(); //Save the context state
+
+    ctx.strokeStyle = this.outlineColour;
+    ctx.lineWidth = this.outlineThickness;
+    ctx.strokeRect(this.x, this.y, this.w, this.h);
+
+    ctx.fillStyle = this.fillColour;
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+
+    ctx.fillStyle = this.textColour;
+    ctx.font = this.textSize.toString() + "px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(this.text, this.x + this.w / 2, this.y + this.h - (this.h / 8));
 
     ctx.restore(); //Restore it
   }
@@ -154,6 +247,65 @@ class MenuManager
     this.buttonSpacingY = 0; 
     this.buttonStartLocationX = 0;
     this.buttonStartLocationY = 0;
+
+    this.mousePosition = {x:0, y:0};
+    this.mouseRect = new MMRect(0, 0, 1, 1);
+    document.addEventListener("mousemove", this.mouseMove.bind(this));
+    document.addEventListener("mousedown", this.mouseDown.bind(this));
+  }
+
+  /**
+  * Updates the mouse position
+  * @param {!e} event Mouse event
+  */
+  mouseMove(e)
+  {
+    //Check if there is currently a scene
+    if(this.current.value !== undefined)
+    {
+      //Update the mouse position
+      this.mousePosition.x = e.offsetX;
+      this.mousePosition.y = e.offsetY;
+      this.mouseRect.setPosition(e.offsetX, e.offsetY); //Update the mouse rect
+
+      for(let btn of this.sceneButtons.get(this.current.key))
+      {
+        if(btn.rect.intersects(this.mouseRect))
+        {
+          console.log("Highlighting a button");
+        }
+      }
+    }
+  }
+
+  /**
+  * Updates the mouse position and checks if the left mouse button has been clicked
+  * @param {!e} event Mouse event
+  */
+  mouseDown(e)
+  {
+    //Check if there is currently a scene
+    if(this.current.value !== undefined)
+    {
+      //Update the mouse position
+      this.mousePosition.x = e.offsetX;
+      this.mousePosition.y = e.offsetY;
+      this.mouseRect.setPosition(e.offsetX, e.offsetY); //Update the mouse rect
+
+      //If the left mouse button is clicked
+      if(e.button === 0)
+      {
+        //Loop through all the buttons for the scene
+        for(let btn of this.sceneButtons.get(this.current.key))
+        {
+          if(btn.rect.intersects(this.mouseRect))
+          {
+
+            break; //Break out as we know we have clicked on a button
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -401,13 +553,13 @@ class MenuManager
     }
   }
 
-  addPremadeButtonToScene(sceneName, button, includeInAllignment)
+  createRadioButton(x, y, r, id, checked)
   {
-
+    return new MMRadioButton(x, y, r, id, checked);
   }
 
-  createRadioButton(x, y, r)
+  createMenuButton(x, y, w, h, id, text = "")
   {
-
+    return new MMButton(x, y, w, h, id, text);
   }
 }
