@@ -46,3 +46,23 @@ function main()
 
   console.log("Working");
 }
+
+
+class MyCustomButton
+{
+  constructor()
+  {
+    this.highlighted = false; //This will be used by the MenuManager
+    this.rect = new MMRect(0, 0, 100, 100); //Rectangle of position 0,0 and a Width and Height of 100 
+  }
+
+  update(dt)
+  {
+    this.rect.setPosition(this.x, this.y);
+  }
+
+  draw(ctx)
+  {
+
+  }
+}

@@ -34,7 +34,31 @@ class Game
     this.mManager.addButtonToScene("Options", audioSlider, false);
     this.mManager.addButtonToScene("Options", playButton, false);
     this.mManager.addButtonToScene("Options", audioRadioButton, false);
+
+    document.addEventListener("MMButtonHighlighted", this.buttonHighlighted.bind(this));
+    document.addEventListener("MMButtonUnhighlighted", this.buttonUnhighlighted.bind(this));
+    document.addEventListener("MMButtonPressed", this.buttonPressed.bind(this));
   }
+
+  
+  buttonHighlighted(e)
+  {
+    console.log("Caught event for button highlight");
+    e.detail.button.fillColour = "#4bc64f";
+  }
+
+  buttonUnhighlighted(e)
+  {
+    console.log("Caught event for button unhighlight");
+    e.detail.button.fillColour = "#ffffff";
+  }
+
+  buttonPressed(e)
+  {
+    console.log("Caught event for button pressed");
+    e.detail.button.text = "CLICKED";
+  }
+
   initGame()
   {
     //Creating the canvas

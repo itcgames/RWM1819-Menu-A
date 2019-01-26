@@ -367,8 +367,6 @@ class MenuManager
     this.mouseRect = new MMRect(0, 0, 1, 1);
     document.addEventListener("mousemove", this.mouseMove.bind(this));
     document.addEventListener("mousedown", this.mouseDown.bind(this));
-
-    this.mouse = undefined;
   }
 
 
