@@ -267,8 +267,8 @@ class MenuManager
           else
           {
             //Set the x and y of the other buttons
-            this.sceneButtons.get(sceneName)[i].x = (this.buttonStartLocationX * i) + this.buttonSpacingX;
-            this.sceneButtons.get(sceneName)[i].y = (this.buttonStartLocationY * i) + this.buttonSpacingY;
+            this.sceneButtons.get(sceneName)[i].x = this.buttonStartLocationX + (this.buttonSpacingX * i);
+            this.sceneButtons.get(sceneName)[i].y = this.buttonStartLocationY + (this.buttonSpacingY * i);
           }
         }
       }

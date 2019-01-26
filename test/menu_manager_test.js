@@ -73,11 +73,14 @@ class Button {
   * @param {!ctx} context The context of the window, used for drawing
   */
   draw(ctx) {
+      ctx.save();
       ctx.fillStyle = "#000000"; //Set to black
       ctx.fillRect(this.x, this.y, this.w, this.h);
       ctx.fillStyle = "#ffffff"; //Set to white
-      ctx.font = "15px Arial";
-      ctx.fillText("button", this.x, this.y);
+      ctx.font = "25px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(this.text, this.x + (this.w / 2), this.y + (this.h / 2));
+      ctx.restore();
   }
 }
 
@@ -174,35 +177,35 @@ describe('MenuManager', function () {
       drawScene("Scene3", 1000);
   });
 
-  // it('Fade Test', function () {
-  //   mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
+  it('Fade Test', function () {
+    mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
 
-  //   var start = new Date().getTime(); //Start timer
+    var start = new Date().getTime(); //Start timer
 
-  //   while(true)
-  //   {
-  //     if ((new Date().getTime() - start) > 4000){ // If 4 seconds have passed
-  //       break;
-  //     }
-  //     //Update/draw the scene
-  //     mManager.update();
-  //     mManager.draw(ctx);
-  //   }
+    while(true)
+    {
+      if ((new Date().getTime() - start) > 4000){ // If 4 seconds have passed
+        break;
+      }
+      //Update/draw the scene
+      mManager.update();
+      mManager.draw(ctx);
+    }
 
-  //   expect(mManager.current.key).to.equal("Scene1"); //Should be at scene1 now after the fade
-  // });
+    expect(mManager.current.key).to.equal("Scene1"); //Should be at scene1 now after the fade
+  });
 
   //Testing button allignment
-  it('Button Allignment test', function (){
-    var playButton = new Button(0,0, 100, 50, "PLAY");
-    var optionsButton = new Button(0,0,100, 50, "OPTIONS");
-    var exitButton = new Button(0,0,100, 50, "EXIT");
+  it('Horizontal Button Allignment test', function (){
+    var playButton = new Button(0,0, 150, 50, "PLAY");
+    var optionsButton = new Button(0,0,150, 50, "OPTIONS");
+    var exitButton = new Button(0,0,150, 50, "EXIT");
     var menuScene = new MenuScene("#42f4f4");
     mManager.addScene("Main Menu", menuScene); //Add the main menu to the menu manager
     mManager.setCurrentScene("Main Menu"); //Make main menu the current scene
     mManager.setButtonAllignment("Main Menu");
     //Set the buttons to start at 100, 100 and have 200 pixels between each other on the x axis
-    mManager.setButtonStartAndSpacing(100, 100, 200, 0); 
+    mManager.setButtonStartAndSpacing(150, 200, 200, 0); 
 
     //Add the 3 buttons to the scene
     mManager.addButtonToScene("Main Menu", playButton);
