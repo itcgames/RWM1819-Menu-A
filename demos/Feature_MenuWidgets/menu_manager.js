@@ -27,7 +27,7 @@ class MMRect
     this.w = w;
     this.h = h;
     this.min = {x:this.x, y:this.y};
-    this.max = {x:this.x + this.w, y:this.y + this.h};
+    this.max = {x:this.x + this.w, y:this.y + this.y};
   }
 
   /**
@@ -40,7 +40,7 @@ class MMRect
     this.x = x;
     this.y = y;
     this.min = {x:this.x, y:this.y};
-    this.max = {x:this.x + this.w, y:this.y + this.h};
+    this.max = {x:this.x + this.w, y:this.y + this.w};
   }
 
   /**
@@ -86,7 +86,6 @@ class MMRadioButton
     this.outlineColour = "#000000"; //Set to black
     this.checkRadius = r - 20; //Checked radius is teh radius of the button minus 5
     this.outlineThickness = 10;
-    this.highlighted = false;
     this.checked = checked; //Set whether the radio button is checked or not
     this.rect = new MMRect(x - r, y - r, r * 2, r * 2); //Creates a new rectangle
   }
@@ -171,7 +170,6 @@ class MMSlider
     this.textSize = 20;
     this.textColour = "#ffffff"; //White
     this.text = this.currentVal.toString();
-    this.highlighted = false;
     this.id = id; //Set the id of the string
     this.rect = new MMRect(this.indicator.x - 20, this.indicator.y - 20, 40, 40); //Creates a new rectangle for the indicator
   }
@@ -285,7 +283,6 @@ class MMButton
     this.outlineColour = "#000000"; //Black outline colour
     this.fillColour = "#ffffff"; //White
     this.outlineThickness = 5;
-    this.highlighted = false;
     this.rect = new MMRect(x, y, w, h); //Creates a new rectangle
   }
 
@@ -358,38 +355,10 @@ class MenuManager
     this.buttonStartLocationX = 0;
     this.buttonStartLocationY = 0;
 
-    //Event variables, we wiil use these to fire events on buttons
-    this.highlightEvent = new CustomEvent('MMButtonHighlighted', {detail: {button:0}});
-    this.unlightedEvent = new CustomEvent('MMButtonUnhighlighted', {detail: {button:0}});
-    this.pressedEvent = new CustomEvent('MMButtonPressed', {detail: {button:0}});
-
     this.mousePosition = {x:0, y:0};
     this.mouseRect = new MMRect(0, 0, 1, 1);
     document.addEventListener("mousemove", this.mouseMove.bind(this));
     document.addEventListener("mousedown", this.mouseDown.bind(this));
-    document.addEventListener("MMButtonHighlighted", this.buttonHighlighted.bind(this));
-    document.addEventListener("MMButtonUnhighlighted", this.buttonUnhighlighted.bind(this));
-    document.addEventListener("MMButtonPressed", this.buttonPressed.bind(this));
-
-    this.mouse = undefined;
-  }
-
-  buttonHighlighted(e)
-  {
-    console.log("Caught event for button highlight");
-    e.detail.button.fillColour = "#4bc64f";
-  }
-
-  buttonUnhighlighted(e)
-  {
-    console.log("Caught event for button unhighlight");
-    e.detail.button.fillColour = "#ffffff";
-  }
-
-  buttonPressed(e)
-  {
-    console.log("Caught event for button pressed");
-    e.detail.button.text = "CLICKED";
   }
 
   /**
@@ -410,21 +379,7 @@ class MenuManager
       {
         if(btn.rect.intersects(this.mouseRect))
         {
-          //Since we highlighted a button, set the event button to be the highlighted button
-          if(btn.highlighted === false)
-          {
-            //Only fire the event if we havnt fired it already
-            this.highlightEvent.detail.button = btn;
-            btn.highlighted = true;
-            document.dispatchEvent(this.highlightEvent); //Fire that event
-          }
-          break;
-        }
-        else if(btn.highlighted) //Else if the button is highlighted and the mouse isnt intersecting it, fire an unhighlighted event
-        {
-          this.unlightedEvent.detail.button = btn; //Set the button to be in the event
-          btn.highlighted = false; //Set highlighted to false
-          document.dispatchEvent(this.unlightedEvent); //Fire the unhighlight event
+
           break;
         }
       }
@@ -453,8 +408,7 @@ class MenuManager
         {
           if(btn.rect.intersects(this.mouseRect))
           {
-            this.pressedEvent.detail.button = btn;
-            document.dispatchEvent(this.pressedEvent);
+
             break; //Break out as we know we have clicked on a button
           }
         }
@@ -481,6 +435,7 @@ class MenuManager
 
     if(this.current.value == undefined) //automatically sets current to the first scene added
     {
+      console.log("current set");
       this.current.value = this.scenes.get(name);
       this.current.key = name;
     }
@@ -498,6 +453,7 @@ class MenuManager
     if(!this.fading && this.current.value.sceneEnded)
     {
       this.fadeTo(this.current.value.autoFadeToScene);
+      console.log("Fading to scene automatically")
     }
 
     if(this.fading)
@@ -745,6 +701,16 @@ class MenuManager
   createSlider(x, y, w, h, minVal, maxVal, id)
   {
     return new MMSlider(x, y, w, h, minVal, maxVal, id);
+  }
+
+  /**
+  * Returns the button from the scene with the id of buttonID
+  * @param {!sceneName} str The name of the scene the button is in
+  * @param {!buttonID} str The buttonID to find
+  */
+  getButton(sceneName, buttonID)
+  {
+
   }
 }
 

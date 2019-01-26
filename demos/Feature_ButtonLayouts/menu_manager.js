@@ -400,14 +400,4 @@ class MenuManager
       }
     }
   }
-
-  addPremadeButtonToScene(sceneName, button, includeInAllignment)
-  {
-
-  }
-
-  createRadioButton(x, y, r)
-  {
-
-  }
 }
