@@ -60,10 +60,10 @@ class Game
     //Set the buttons to start at 400, 150 and have 150 pixels between each other on the Y axis
     this.mManager.setButtonStartAndSpacing(400, 150, 0, 150); 
 
-    //Add our buttons to the menu
-    this.mManager.addButtonToScene("Main Menu", new Button(0,0, 150, 50, "PLAY"));
-    this.mManager.addButtonToScene("Main Menu", new Button(0,0, 150, 50, "OPTIONS"));
-    this.mManager.addButtonToScene("Main Menu", new Button(0,0, 150, 50, "EXIT"));
+    //Add our buttons to the menu, with a boolean of true to indicate we want the button alligned for us
+    this.mManager.addButtonToScene("Main Menu", new Button(0,0, 150, 50, "PLAY"), true);
+    this.mManager.addButtonToScene("Main Menu", new Button(0,0, 150, 50, "OPTIONS"), true);
+    this.mManager.addButtonToScene("Main Menu", new Button(0,0, 150, 50, "EXIT"), true);
   }
   initGame()
   {

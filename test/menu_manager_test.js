@@ -73,14 +73,14 @@ class Button {
   * @param {!ctx} context The context of the window, used for drawing
   */
   draw(ctx) {
-      ctx.save();
-      ctx.fillStyle = "#000000"; //Set to black
-      ctx.fillRect(this.x, this.y, this.w, this.h);
-      ctx.fillStyle = "#ffffff"; //Set to white
-      ctx.font = "25px Arial";
-      ctx.textAlign = "center";
-      ctx.fillText(this.text, this.x + (this.w / 2), this.y + (this.h / 2));
-      ctx.restore();
+    ctx.save();
+    ctx.fillStyle = "#000000"; //Set to black
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+    ctx.fillStyle = "#ffffff"; //Set to white
+    ctx.font = "25px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(this.text, this.x + (this.w / 2), this.y + (this.h / 2));
+    ctx.restore();
   }
 }
 
@@ -197,7 +197,7 @@ describe('MenuManager', function () {
   });
 
   //Testing button allignment
-  it('Horizontal Button Allignment test', function (){
+  it('Button Allignment test', function (){
     var playButton = new Button(0,0, 150, 50, "PLAY");
     var optionsButton = new Button(0,0,150, 50, "OPTIONS");
     var exitButton = new Button(0,0,150, 50, "EXIT");
@@ -210,10 +210,30 @@ describe('MenuManager', function () {
     mManager.setButtonStartAndSpacing(400, 150, 0, 150); 
 
     //Add the 3 buttons to the scene
-    mManager.addButtonToScene("Main Menu", playButton);
-    mManager.addButtonToScene("Main Menu", optionsButton);
-    mManager.addButtonToScene("Main Menu", exitButton);
+    mManager.addButtonToScene("Main Menu", playButton, true);
+    mManager.addButtonToScene("Main Menu", optionsButton, true);
+    mManager.addButtonToScene("Main Menu", exitButton, true);
 
     mManager.draw(ctx);
+  });
+
+  it('Testing Widgets', function (){
+    // var playButton = new Button(0,0, 150, 50, "PLAY");
+    // var optionsButton = new Button(0,0,150, 50, "OPTIONS");
+    // var exitButton = new Button(0,0,150, 50, "EXIT");
+    // var menuScene = new MenuScene("#42f4f4");
+    // mManager.removeScene("Main Menu");
+    // mManager.addScene("Main Menu", menuScene); //Add the main menu to the menu manager
+    // mManager.setCurrentScene("Main Menu"); //Make main menu the current scene
+    // mManager.setButtonAllignment("Main Menu");
+    // //Set the buttons to start at 400, 150 and have 150 pixels between each other on the Y axis
+    // mManager.setButtonStartAndSpacing(400, 150, 0, 150); 
+
+    // //Add the 3 buttons to the scene
+    // mManager.addButtonToScene("Main Menu", playButton, true);
+    // mManager.addButtonToScene("Main Menu", optionsButton, true);
+    // mManager.addButtonToScene("Main Menu", exitButton);
+
+    // mManager.draw(ctx);
   });
 });
