@@ -82,7 +82,6 @@ class MMRadioButton
     this.y = y;
     this.r = r;
     this.id = id;
-    this.highlighted = false; //Set wheter the button is highlighted
     this.fillColour = "#000000"; //Set to black
     this.outlineColour = "#000000"; //Set to black
     this.checkRadius = r - 20; //Checked radius is teh radius of the button minus 5
@@ -146,11 +145,124 @@ class MMRadioButton
   }
 }
 
+class MMSlider
+{
+  /**
+  * Slider constructor
+  * @param {!x} int The X Position of the button
+  * @param {!y} int The Y Position of the button
+  * @param {!w} int The Width of the button
+  * @param {!h} int The Height of the button
+  * @param {!id} str The id of the button
+  */
+  constructor(x, y, w, h, minVal, maxVal, id)
+  {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.indicator = {x:x + w / 2, y:y + h / 2}; //The position of the indicator (should be at the center)
+    this.indicatorColour = "#000000"; //Black for the circle indicator
+    this.indicatorSize = 20;
+    this.minVal = minVal;
+    this.maxVal = maxVal;
+    this.currentVal = (maxVal - minVal) / 2;
+    this.textSize = 20;
+    this.textColour = "#ffffff"; //White
+    this.text = this.currentVal.toString();
+    this.id = id; //Set the id of the string
+    this.rect = new MMRect(this.indicator.x - 20, this.indicator.y - 20, 40, 40); //Creates a new rectangle for the indicator
+  }
+
+  setFillColour(colour)
+  {
+    this.fillColour = colour;
+  }
+
+  setIndicatorColour(colour)
+  {
+    this.indicatorColour = colour;
+  }
+
+  clampIndicatorValue(value)
+  {
+    //Sets the new value but clamps it to the minimum and maximum values
+    if(value < this.minVal)
+    {
+      this.currentVal = this.minVal;
+    }
+    else if(value > this.maxVal)
+    {
+      this.currentVal = this.maxVal;
+    }
+    else
+    {
+      this.currentVal = value;
+    }
+
+    this.text = this.currentVal.toString();
+  }
+
+  setIndicatorValue(value)
+  {
+    clampIndicatorValue(value);
+  }
+
+  increaseValue(amount)
+  {
+    clampIndicatorValue(this.currentVal + amount);
+  }
+
+  decreaseValue(amount)
+  {
+    clampIndicatorValue(this.currentVal - amount);
+  }
+
+  setIndicatorSize(size)
+  {
+    this.indicatorSize = size;
+  }
+
+  setTextSize(size)
+  {
+    this.textSize = size;
+  }
+
+  setTextColour(colour)
+  {
+    this.textColour = colour;
+  }
+
+  draw(ctx)
+  {
+    ctx.save(); //Save the context state
+
+    ctx.fillStyle = "#f4aa42";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+
+    //Draw the indicator
+    ctx.beginPath();
+    ctx.fillStyle = this.indicatorColour;
+    ctx.arc(this.indicator.x, this.indicator.y, this.indicatorSize, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+
+    //Draw the value of the indicator
+    ctx.fillStyle = this.textColour;
+    ctx.font = this.textSize.toString() + "px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(this.text, this.x + this.w / 2, this.y + this.h - (this.h / 8));
+
+    ctx.restore(); //Restore it
+  }
+}
+
+
 /* Menu Manager Radio Button */
 class MMButton
 {
   /**
-  * Radio button constructor
+  * Menu button constructor
   * @param {!x} int The X Position of the button
   * @param {!y} int The Y Position of the button
   * @param {!w} int The Width of the button
@@ -177,11 +289,6 @@ class MMButton
   setFillColour(colour)
   {
     this.fillColour = colour;
-  }
-
-  setHighlighted(bool)
-  {
-    this.highlighted = bool;
   }
 
   setOutlineColour(colour)
@@ -558,8 +665,29 @@ class MenuManager
     return new MMRadioButton(x, y, r, id, checked);
   }
 
+  /**
+  * Returns the button from the scene with the id of buttonID
+  * @param {!sceneName} str The name of the scene the button is in
+  * @param {!buttonID} str The buttonID to find
+  */
   createMenuButton(x, y, w, h, id, text = "")
   {
     return new MMButton(x, y, w, h, id, text);
   }
+
+  createSlider(x, y, w, h, minVal, maxVal, id)
+  {
+    return new MMSlider(x, y, w, h, minVal, maxVal, id);
+  }
+
+  /**
+  * Returns the button from the scene with the id of buttonID
+  * @param {!sceneName} str The name of the scene the button is in
+  * @param {!buttonID} str The buttonID to find
+  */
+  getButton(sceneName, buttonID)
+  {
+
+  }
 }
+

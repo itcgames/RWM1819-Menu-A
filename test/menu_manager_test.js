@@ -223,14 +223,14 @@ describe('MenuManager', function () {
     mManager.setCurrentScene("Options");
     //Create radio button at 150, 150 with a size of 50 radius and its not checked
     var soundOnButton = mManager.createRadioButton(150, 150, 50, "Sound Button", false);
-    var debugDrawOn = mManager.createRadioButton(150, 275, 50, "Debug Draw Button", false);
-    var playButton = mManager.createMenuButton(150, 400, 200, 50, "Play Button", "PLAY");
+    var playButton = mManager.createMenuButton(150, 275, 200, 50, "Play Button", "PLAY");
+    var audioSlider = mManager.createSlider(150, 400, 350, 15, 0, 100, "Audio Slider");
 
 
     //Add the 3 buttons to the scene
     mManager.addButtonToScene("Options", soundOnButton, false);
-    mManager.addButtonToScene("Options", debugDrawOn, false);
     mManager.addButtonToScene("Options", playButton, false);
+    mManager.addButtonToScene("Options", audioSlider, false);
 
     mManager.draw(ctx);
   });
