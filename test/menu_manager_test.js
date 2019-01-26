@@ -1,7 +1,7 @@
 /* Testing */
 var mManager = new MenuManager(); //Create a menu manager
 
-/* Scene class, this is only define din the test to avoid conflicts */
+/* Scene class, this is only defined in the test to avoid conflicts */
 class Scene {
     /**
     * Constructor
@@ -27,6 +27,59 @@ class Scene {
     }
 }
 
+/* MenuScene class, this is only defined in the test to avoid conflicts */
+class MenuScene {
+  /**
+  * Constructor
+  * @param {!colour} colour the colour of the screen
+  */
+  constructor(colour) {
+      this.colour = colour;
+  }
+  /**
+  * Updates the current scene
+  */
+  update() {
+  }
+  /**
+  * Draws the current scene
+  * @param {!ctx} context The context of the window, used for drawing
+  */
+  draw(ctx) {
+      ctx.fillStyle = this.colour; //Set colour to the passed in colour
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  }
+}
+
+/* Button class, this is only defined in the test to avoid conflicts */
+class Button {
+  /**
+  * Constructor
+  * @param {!x} int The x position of the button
+  * @param {!y} int The y position of the button
+  * @param {!w} int The width of the button
+  * @param {!h} int The height of the button
+  * @param {!text} str The str to display on the button
+  */
+  constructor(x, y, w, h, text) {
+      this.x = x;
+      this.y = y;
+      this.w = w;
+      this.h = h;
+      this.text = text;
+  }
+  /**
+  * Draws the button
+  * @param {!ctx} context The context of the window, used for drawing
+  */
+  draw(ctx) {
+      ctx.fillStyle = "#000000"; //Set to black
+      ctx.fillRect(this.x, this.y, this.w, this.h);
+      ctx.fillStyle = "#ffffff"; //Set to white
+      ctx.font = "15px Arial";
+      ctx.fillText("button", this.x, this.y);
+  }
+}
 
 
 //Create our scenes
@@ -66,11 +119,11 @@ function sleep(milliseconds) { //Sleep function
 * Updates and draws a specified scene
 * @param {!name} str The name of the scene to update and draw
 */
-function drawScene(name){
+function drawScene(name, sleepTime){
   mManager.setCurrentScene(name);
   mManager.update();
   mManager.draw(ctx);
-  sleep(2250);
+  sleep(sleepTime);
   expect(mManager.scenes.size).to.equal(3);
 } //Draw a scene for testing purposes
 
@@ -86,6 +139,9 @@ describe('MenuManager', function () {
     expect(mManager.setFadeSpeed).to.be.a('function');
     expect(mManager.update).to.be.a('function');
     expect(mManager.draw).to.be.a('function');
+    expect(mManager.setButtonAllignment).to.be.a('function');
+    expect(mManager.setButtonStartAndSpacing).to.be.a('function');
+    expect(mManager.addButtonToScene).to.be.a('function');
   });
 
   //Add 6 scenes
@@ -107,32 +163,52 @@ describe('MenuManager', function () {
   });
 
   it('Draw Scene1', function () {
-      drawScene("Scene1");
+      drawScene("Scene1",1000);
   });
 
   it('Draw Scene2', function () {
-      drawScene("Scene2");
+      drawScene("Scene2", 1000);
   });
 
   it('Draw Scene3', function () {
-      drawScene("Scene3");
+      drawScene("Scene3", 1000);
   });
 
-  it('Fade Test', function () {
-    mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
+  // it('Fade Test', function () {
+  //   mManager.fadeTo("Scene1"); //Set it to fade to "Scene1"
 
-    var start = new Date().getTime(); //Start timer
+  //   var start = new Date().getTime(); //Start timer
 
-    while(true)
-    {
-      if ((new Date().getTime() - start) > 4000){ // If 4 seconds have passed
-        break;
-      }
-      //Update/draw the scene
-      mManager.update();
-      mManager.draw(ctx);
-    }
+  //   while(true)
+  //   {
+  //     if ((new Date().getTime() - start) > 4000){ // If 4 seconds have passed
+  //       break;
+  //     }
+  //     //Update/draw the scene
+  //     mManager.update();
+  //     mManager.draw(ctx);
+  //   }
 
-    expect(mManager.current.key).to.equal("Scene1"); //Should be at scene1 now after the fade
+  //   expect(mManager.current.key).to.equal("Scene1"); //Should be at scene1 now after the fade
+  // });
+
+  //Testing button allignment
+  it('Button Allignment test', function (){
+    var playButton = new Button(0,0, 100, 50, "PLAY");
+    var optionsButton = new Button(0,0,100, 50, "OPTIONS");
+    var exitButton = new Button(0,0,100, 50, "EXIT");
+    var menuScene = new MenuScene("#42f4f4");
+    mManager.addScene("Main Menu", menuScene); //Add the main menu to the menu manager
+    mManager.setCurrentScene("Main Menu"); //Make main menu the current scene
+    mManager.setButtonAllignment("Main Menu");
+    //Set the buttons to start at 100, 100 and have 200 pixels between each other on the x axis
+    mManager.setButtonStartAndSpacing(100, 100, 200, 0); 
+
+    //Add the 3 buttons to the scene
+    mManager.addButtonToScene("Main Menu", playButton);
+    mManager.addButtonToScene("Main Menu", optionsButton);
+    mManager.addButtonToScene("Main Menu", exitButton);
+
+    mManager.draw(ctx);
   });
 });

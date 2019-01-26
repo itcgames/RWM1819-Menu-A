@@ -30,13 +30,14 @@ class MenuManager
     this.sceneToFadeTo = ""; //The scene we want to fade to
 
     //Allignment variables
-    //This holds a dictionary of possible positions of an allignment
-    this.buttonAllignment = {"Horizontal": ["Top", "Bottom"], "Vertical": ["Left", "Right", "Center"]};
-    this.sceneAllignments = new Map(); //A map of our scenes allignments
     this.useButtonAllignment = new Map(); //A map of bools for our scenes
 
     //Button variables
     this.sceneButtons = new Map(); //A map of scene buttons
+    this.buttonSpacingX = 0;
+    this.buttonSpacingY = 0; 
+    this.buttonStartLocationX = 0;
+    this.buttonStartLocationY = 0;
   }
 
   /**
@@ -52,7 +53,6 @@ class MenuManager
     }
 
     this.scenes.set(name, scene); //add scene to our map, with the key 'name'
-    this.sceneAllignments.set(name, ["Horizontal", "Top"]); //Add scene allignment to our map
     this.sceneButtons.set(name, []); //Initialise empty button list
     this.useButtonAllignment.set(name, false); //Dont use button allignment for this scene
 
@@ -117,6 +117,15 @@ class MenuManager
         ctx.globalAlpha = this.fadeAlpha;
       }
       this.current.value.draw(ctx); //Pass ctx to the scene for drawing
+
+      //If this scene has buttons, draw them
+      if(this.sceneButtons.has(this.current.key))
+      {
+        for(let btn of this.sceneButtons.get(this.current.key))
+        {
+          btn.draw(ctx);
+        }
+      }
     }
     else //If no scene is selected then draw RED to the canvas
     {
@@ -202,26 +211,31 @@ class MenuManager
   }
 
   /**
-  * Sets the allignment of buttons for a scene. This allows a user to decide
-  * if a scenes buttons should be distributed accross the top/bottom/left/right
-  * of the scene
+  * Sets the scene to use button allignment
   * @param {!sceneName} str The name of the scene we want to set the allignment of
-  * @param {!allignment} str The allignment we want, Horizontal or Vertical
-  * @param {!position} str The position of the alignment we want Top/Bottom/Left/Right/Center
   */
-  setButtonAllignment(sceneName, allignment, position)
+  setButtonAllignment(sceneName)
   {
       //If the scene exists
       if(this.scenes.has(sceneName)){
-
-        //If the allignment combination is correct then set it
-        if(this.buttonAllignment[allignment].has(position))
-        {
-          //Set the scene allignment
-          this.sceneAllignments[sceneName] = [allignement, position];
-          this.useButtonAllignment[sceneName] = true; //Use button allignment
-        }
+          //Use button allignment
+          this.useButtonAllignment.set(sceneName,true); 
       }
+  }
+
+    /**
+  * Sets the start location of buttons and the space between buttons on the screen
+  * @param {!startX} int The starting X position of the buttons
+  * @param {!startY} int The starting Y position of the buttons
+  * @param {!spaceBetweenX} int The amount of space between the buttons on the X axis
+  * @param {!spaceBetweenY} int The amount of space between the buttons on the Y axis
+  */
+  setButtonStartAndSpacing(startX, startY, spaceBetweenX, spaceBetweenY)
+  {
+    this.buttonSpacingX = spaceBetweenX;
+    this.buttonSpacingY = spaceBetweenY;
+    this.buttonStartLocationX = startX;
+    this.buttonStartLocationY = startY;
   }
 
   /**
@@ -237,12 +251,26 @@ class MenuManager
     if(this.scenes.has(sceneName)){
 
       //Add button to the scene
-      this.sceneButtons[sceneName].push(button);
+      this.sceneButtons.get(sceneName).push(button);
 
       //If using button allignment, allign the button
-      if(this.useButtonAllignment[sceneName]){
-      //Position the button based on allignment
-
+      if(this.useButtonAllignment.has(sceneName)){
+        
+        for(var i in this.sceneButtons.get(sceneName))
+        {
+          //If i is 0, set the x to the start location
+          if(i === 0)
+          {
+            this.sceneButtons.get(sceneName)[i].x = this.buttonStartLocationX;
+            this.sceneButtons.get(sceneName)[i].y = this.buttonStartLocationY;
+          }
+          else
+          {
+            //Set the x and y of the other buttons
+            this.sceneButtons.get(sceneName)[i].x = (this.buttonStartLocationX * i) + this.buttonSpacingX;
+            this.sceneButtons.get(sceneName)[i].y = (this.buttonStartLocationY * i) + this.buttonSpacingY;
+          }
+        }
       }
     }
   }
