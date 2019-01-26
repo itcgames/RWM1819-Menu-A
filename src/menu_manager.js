@@ -367,30 +367,10 @@ class MenuManager
     this.mouseRect = new MMRect(0, 0, 1, 1);
     document.addEventListener("mousemove", this.mouseMove.bind(this));
     document.addEventListener("mousedown", this.mouseDown.bind(this));
-    document.addEventListener("MMButtonHighlighted", this.buttonHighlighted.bind(this));
-    document.addEventListener("MMButtonUnhighlighted", this.buttonUnhighlighted.bind(this));
-    document.addEventListener("MMButtonPressed", this.buttonPressed.bind(this));
 
     this.mouse = undefined;
   }
 
-  buttonHighlighted(e)
-  {
-    console.log("Caught event for button highlight");
-    e.detail.button.fillColour = "#4bc64f";
-  }
-
-  buttonUnhighlighted(e)
-  {
-    console.log("Caught event for button unhighlight");
-    e.detail.button.fillColour = "#ffffff";
-  }
-
-  buttonPressed(e)
-  {
-    console.log("Caught event for button pressed");
-    e.detail.button.text = "CLICKED";
-  }
 
   /**
   * Updates the mouse position
